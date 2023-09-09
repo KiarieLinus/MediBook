@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Patients</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/add-patient">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item *ngFor="let patient of patients$ | async">
+      <ion-label>
+        <h2>Name: {{patient.name}}</h2>
+        <h3>Gender: {{patient.gender}}</h3>
+        <h4>Type Of Service: {{patient.services[0]}}</h4>
+        <p>Date Of Birth: {{patient.date_of_birth}}</p>
+        <p *ngIf="patient.general_comments != null">General comments: {{patient.general_comments}}</p>
+
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

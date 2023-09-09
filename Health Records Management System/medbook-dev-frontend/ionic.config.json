@@ -1,0 +1,7 @@
+{
+  "name": "medbook-dev-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
