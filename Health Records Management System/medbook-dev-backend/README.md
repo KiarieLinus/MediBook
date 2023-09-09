@@ -36,7 +36,7 @@ You can now access the server at http://localhost:8000
 
 ## Database seeding
 
-**Populate the database with seed data with relationships which includes users, articles, comments, tags, favorites and follows. This can help you to quickly start testing the api or couple a frontend and start using it with ready content.**
+**Populate the database with seed data with relationships which includes patients, genders, comments, and services. This can help you to quickly start testing the api or couple a frontend and start using it with ready content.**
 
 Open the [seeders](https://github.com/KiarieLinus/MediBook/tree/main/Health%20Records%20Management%20System/medbook-dev-backend/database/seeders) and set the property values as per your requirement
 
