@@ -4,7 +4,7 @@
 
 ## Installation
 
-* Set up the [backend](https://github.com/KiarieLinus/MediBook/blob/main/Health%20Records%20Management%20System/medbook-dev-backend/README.md?plain=1)
+* Set up the [backend](https://github.com/KiarieLinus/MediBook/blob/main/Health%20Records%20Management%20System/medbook-dev-backend/README.md)
 
 * [Download the installer](https://nodejs.org/) for Node LTS.
   
