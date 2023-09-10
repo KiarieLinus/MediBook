@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Patient } from '../../models/patient.model';
-import { Observable, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { PatientsService } from 'src/app/services/patients.service';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
+import { AddPatientComponent } from '../add-patient/add-patient.component';
 
 @Component({
   selector: 'app-patients',
@@ -15,7 +16,8 @@ export class PatientsComponent implements OnInit {
 
   constructor(
     private patientsService: PatientsService,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private modalCtrl: ModalController,
   ) { }
 
   async ngOnInit() {
@@ -30,6 +32,49 @@ export class PatientsComponent implements OnInit {
         return patients;
       })
     )
+  }
+
+  async openAddModal() {
+    const modal = await this.modalCtrl.create({
+      component: AddPatientComponent,
+    });
+
+    await modal.present();
+
+    const { data: newPatient } = await modal.onDidDismiss();
+    if (newPatient) {
+      this.patients$ = this.patientsService.getPatients().pipe(
+        tap(patients => {
+          return patients;
+        })
+      )
+    }
+
+  }
+
+  async openEditModal(patient: Patient) {
+    const modal = await this.modalCtrl.create({
+      component: AddPatientComponent,
+      componentProps: { patient: patient }
+    });
+
+    await modal.present();
+
+    const { data: updatedPatient } = await modal.onDidDismiss();
+
+    if (updatedPatient) {
+      this.patients$ = this.patients$.pipe(
+        map(patients => {
+          patients.forEach(patient => {
+            if (patient.id === updatedPatient.id) {
+              patient = updatedPatient;
+            }
+            return patient;
+          });
+          return patients;
+        })
+      )
+    }
   }
 
 }

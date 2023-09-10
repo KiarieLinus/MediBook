@@ -1,8 +1,14 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Add a patient</ion-title>
-    <ion-buttons slot="start">
+    <ion-title>{{isEditMode ? 'Update' : 'Add'}} a patient</ion-title>
+    <!-- <ion-buttons slot="start" *ngIf="!isEditMode">
       <ion-back-button defaultHref="patients"></ion-back-button>
+    </ion-buttons> -->
+
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal(null)">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -36,7 +42,7 @@
     </ion-item>
 
     <ion-button expand="block" (click)="submitPatient()" [disabled]="form.invalid">
-      Save patient
+      {{isEditMode ? 'Update' : 'Save'}} patient
     </ion-button>
   </form>
 </ion-content>

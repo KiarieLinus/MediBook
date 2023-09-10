@@ -25,11 +25,13 @@ class PatientSeeder extends Seeder
         foreach ($patientsData as $patientData) {
             $gender = Gender::find($patientData['gender_id']);
             $service = Service::inRandomOrder()->first();
+            $service2 = Service::inRandomOrder()->first();
 
             $patient = new Patient($patientData);
             $patient->gender()->associate($gender);
             $patient->save();
             $patient->services()->attach($service);
+            $patient->services()->attach($service2);
         }
     }
 }

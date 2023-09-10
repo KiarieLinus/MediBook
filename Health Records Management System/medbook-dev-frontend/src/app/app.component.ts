@@ -7,7 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor(private http: HttpClient) {
-    http.get('http://localhost:8000/api/patients').subscribe(console.log);
-  }
+  constructor() { }
 }
