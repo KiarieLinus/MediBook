@@ -52,6 +52,7 @@ Run the database seeder and you're done
 
 - GET /api/patients: Get all patients.
 - POST /api/patients: Create a new patient with associated gender and service.
+- PUT /api/patients/{patientId}: Update patient details.
 
 ## Environment variables
 
