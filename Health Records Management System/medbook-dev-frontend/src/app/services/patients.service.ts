@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AddPatient } from '../models/add-patient.model';
 import { Patient } from '../models/patient.model';
 
 

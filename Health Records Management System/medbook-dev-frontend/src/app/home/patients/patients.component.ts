@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Patient } from '../../models/patient.model';
 import { Observable, map, tap } from 'rxjs';
 import { PatientsService } from 'src/app/services/patients.service';
