@@ -12,7 +12,7 @@ import { AddPatientComponent } from '../add-patient/add-patient.component';
 })
 export class PatientsComponent implements OnInit {
   patients$!: Observable<Patient[]>;
-  hasComments$: Boolean = false;
+  mostVisits!: number;
 
   constructor(
     private patientsService: PatientsService,
@@ -29,6 +29,7 @@ export class PatientsComponent implements OnInit {
     this.patients$ = this.patientsService.getPatients().pipe(
       tap(patients => {
         loading.dismiss();
+        this.mostVisits = patients[0].most_visits;
         return patients;
       })
     )
@@ -41,15 +42,14 @@ export class PatientsComponent implements OnInit {
 
     await modal.present();
 
-    const { data: newPatient } = await modal.onDidDismiss();
-    if (newPatient) {
+    const { data: isNewPatient } = await modal.onDidDismiss();
+    if (isNewPatient) {
       this.patients$ = this.patientsService.getPatients().pipe(
         tap(patients => {
           return patients;
         })
       )
     }
-
   }
 
   async openEditModal(patient: Patient) {
@@ -61,7 +61,7 @@ export class PatientsComponent implements OnInit {
     await modal.present();
 
     const { data: updatedPatient } = await modal.onDidDismiss();
-
+    this.mostVisits = updatedPatient.most_visits;
     if (updatedPatient) {
       this.patients$ = this.patients$.pipe(
         map(patients => {

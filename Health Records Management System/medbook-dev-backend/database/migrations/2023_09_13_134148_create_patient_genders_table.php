@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
+use Database\Seeders\PatientGenderSeeder;
 
 return new class extends Migration
 {
@@ -13,12 +15,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_patient_services', function (Blueprint $table) {
+        Schema::create('patient_genders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained('patients');
-            $table->foreignId('service_id')->constrained('services');
+            $table->string('gender');
             $table->timestamps();
         });
+        Artisan::call('db:seed', [
+            '--class' => PatientGenderSeeder::class,
+        ]);
     }
 
     /**
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_patient_services');
+        Schema::dropIfExists('patient_genders');
     }
 };

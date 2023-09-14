@@ -11,6 +11,7 @@ import { PatientsComponent } from './patients/patients.component';
 import { AddPatientComponent } from './add-patient/add-patient.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DateFormatPipe } from '../pipes/date-format-pipe.pipe';
+import { HighlightBackgroundDirective } from '../directives/highlight-background.directive';
 
 @NgModule({
   imports: [
@@ -21,6 +22,6 @@ import { DateFormatPipe } from '../pipes/date-format-pipe.pipe';
     HomePageRoutingModule,
     HttpClientModule,
   ],
-  declarations: [HomePage, PatientsComponent, AddPatientComponent, DateFormatPipe]
+  declarations: [HomePage, PatientsComponent, AddPatientComponent, DateFormatPipe, HighlightBackgroundDirective]
 })
 export class HomePageModule { }

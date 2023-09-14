@@ -9,13 +9,17 @@ class Patient extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'date_of_birth', 'gender_id','general_comments'];
+    protected $fillable = [
+        'name', 'date_of_birth', 'general_comments', 'patient_gender_id',
+    ];
 
-    public function gender(){
-        return $this->belongsTo(Gender::class);
+    public function patientGender()
+    {
+        return $this->belongsTo(PatientGender::class);
     }
 
-    public function services(){
-        return $this->belongsToMany(Service::class, 'tbl_patient_services');
+    public function patientServices()
+    {
+        return $this->hasMany(PatientService::class);
     }
 }

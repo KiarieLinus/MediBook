@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\PatientGender;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,9 +14,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('patients', function (Blueprint $table) {
             $table->id();
-            $table->string('service');
+            $table->string('name');
+            $table->date('date_of_birth');
+            $table->longText('general_comments')->nullable();
+            $table->foreignIdFor(PatientGender::class)
+                ->constrained()
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('patients');
     }
 };

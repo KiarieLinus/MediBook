@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Patient;
+
 
 return new class extends Migration
 {
@@ -13,9 +15,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('genders', function (Blueprint $table) {
+        Schema::create('patient_services', function (Blueprint $table) {
             $table->id();
-            $table->string('gender');
+            $table->string('service');
+            $table->foreignIdFor(Patient::class)
+                ->constrained()
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('genders');
+        Schema::dropIfExists('patient_services');
     }
 };

@@ -18,7 +18,8 @@
       <ion-col>Date Of Birth</ion-col>
       <ion-col>General comments</ion-col>
     </ion-row>
-    <ion-row *ngFor="let patient of patients$ | async" (click)="openEditModal(patient)">
+    <ion-row *ngFor="let patient of patients$ | async" (click)="openEditModal(patient)"
+      [highlightBackground]="patient.services.length == mostVisits">
       <ion-col>{{patient.name}}</ion-col>
       <ion-col>{{patient.gender}}</ion-col>
       <ion-col>{{patient.services[patient.services.length - 1]}}</ion-col>

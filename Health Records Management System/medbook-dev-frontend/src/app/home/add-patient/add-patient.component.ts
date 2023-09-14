@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { take } from 'rxjs';
 import { PatientsService } from 'src/app/services/patients.service';
-import { Router } from '@angular/router';
 import { Patient } from 'src/app/models/patient.model';
 
 @Component({
@@ -20,7 +19,6 @@ export class AddPatientComponent implements OnInit {
   constructor(
     private patientsService: PatientsService,
     private loadingCtrl: LoadingController,
-    private router: Router,
     private modalCtrl: ModalController,
   ) { }
 
@@ -28,6 +26,7 @@ export class AddPatientComponent implements OnInit {
     this.initAddPatientForm();
 
     if (this.patient) {
+      console.log(this.patient.services);
       this.isEditMode = true;
       this.setFormValues();
     }
@@ -36,21 +35,21 @@ export class AddPatientComponent implements OnInit {
   initAddPatientForm() {
     this.form = new FormGroup({
       name: new FormControl(null, [Validators.required]),
-      genderId: new FormControl(null, [Validators.required]),
-      dateOfBirth: new FormControl(null, [Validators.required]),
-      servicesId: new FormControl(null, [Validators.required]),
-      generalComments: new FormControl(null),
-    })
+      gender: new FormControl(null, [Validators.required]),
+      date_of_birth: new FormControl(null, [Validators.required]),
+      services: new FormControl(null, [Validators.required]),
+      general_comments: new FormControl(null),
+    });
   }
 
   setFormValues() {
     this.form.setValue({
       name: this.patient.name,
-      genderId: this.patient.gender === "Male" ? "1" : "2",
-      dateOfBirth: this.patient.date_of_birth,
-      servicesId: this.patient.services[this.patient.services.length - 1] === "Outpatient" ? "1" : "2",
-      generalComments: this.patient.general_comments,
-    })
+      gender: this.patient.gender === "Male" ? "1" : "2",
+      date_of_birth: this.patient.date_of_birth,
+      services: this.patient.services[this.patient.services.length - 1],
+      general_comments: this.patient.general_comments,
+    });
 
     this.form.updateValueAndValidity();
   }
@@ -68,36 +67,23 @@ export class AddPatientComponent implements OnInit {
     let response;
 
     if (this.isEditMode) {
-      let newService = (this.form.value["servicesId"] == "1") ? "Outpatient" : "Inpatient";
-      let services = this.patient.services;
-      services.push(newService);
-      const updatedPatient: Patient = {
-        id: this.patient.id,
-        name: this.form.value["name"],
-        date_of_birth: this.form.value["dateOfBirth"],
-        gender: this.form.value["genderId"],
-        services: services,
-        general_comments: this.form.value["generalComments"]
-      }
-      response = this.patientsService.updatePatient(this.patient.id, updatedPatient);
+      response = this.patientsService.updatePatient(this.patient.id, this.form.value);
     } else {
       response = this.patientsService
         .addPatient(this.form.value);
     }
-
-
     response.pipe(take(1))
       .subscribe((patient) => {
         this.form.reset();
-        // this.router.navigate(['/patients'])
         loading.dismiss();
 
         if (this.isEditMode) {
           this.closeModal(patient);
         } else {
-          this.modalCtrl.dismiss(patient);
+          this.modalCtrl.dismiss(true);
         }
       });
   }
+
 }
 
