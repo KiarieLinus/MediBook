@@ -4,7 +4,7 @@
 
 ## Installation
 
-* Set up the [backend](https://github.com/KiarieLinus/MediBook/blob/main/Health%20Records%20Management%20System/medbook-dev-backend/README.md)
+* Set up the [backend](https://github.com/KiarieLinus/MediBook/blob/main/Health%20Records%20Management%20System/medbook-dev-backend/README.md).
 
 * [Download the installer](https://nodejs.org/) for Node LTS.
   
@@ -12,7 +12,7 @@
   
 * Switch to the repo folder
 
-    cd medbook-dev-frontend
+        cd medbook-dev-frontend
   
 * Run `npm install` from the project root.
   
