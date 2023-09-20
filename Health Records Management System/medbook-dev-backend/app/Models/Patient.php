@@ -15,11 +15,11 @@ class Patient extends Model
 
     public function patientGender()
     {
-        return $this->belongsTo(PatientGender::class);
+        return $this->hasOne(PatientGender::class);
     }
 
     public function patientServices()
     {
-        return $this->hasMany(PatientService::class);
+        return $this->belongsToMany(PatientService::class, 'patient_patient_services');
     }
 }

@@ -3,8 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Artisan;
-use Database\Seeders\PatientGenderSeeder;
 
 return new class extends Migration
 {
@@ -17,12 +15,9 @@ return new class extends Migration
     {
         Schema::create('patient_genders', function (Blueprint $table) {
             $table->id();
-            $table->string('gender');
+            $table->string('name');
             $table->timestamps();
         });
-        Artisan::call('db:seed', [
-            '--class' => PatientGenderSeeder::class,
-        ]);
     }
 
     /**

@@ -1,9 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>{{isEditMode ? 'Update' : 'Add'}} a patient</ion-title>
-    <!-- <ion-buttons slot="start" *ngIf="!isEditMode">
-      <ion-back-button defaultHref="patients"></ion-back-button>
-    </ion-buttons> -->
 
     <ion-buttons slot="end">
       <ion-button (click)="closeModal(null)">
@@ -20,8 +17,7 @@
     </ion-item>
     <ion-item>
       <ion-select formControlName="gender" label="Gender" placeholder="Patient Gender" label-placement="stacked">
-        <ion-select-option value="1">Male</ion-select-option>
-        <ion-select-option value="2">Female</ion-select-option>
+        <ion-select-option *ngFor="let gender of genders" value={{gender.name}}>{{gender.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
@@ -31,8 +27,7 @@
     <ion-item>
       <ion-select formControlName="services" label="{{isEditMode ? 'Update current' : 'Type of'}} service"
         placeholder="Patient Service" label-placement="stacked">
-        <ion-select-option value="Outpatient">Outpatient</ion-select-option>
-        <ion-select-option value="Inpatient">Inpatient</ion-select-option>
+        <ion-select-option *ngFor="let service of services" value={{service.name}}>{{service.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>

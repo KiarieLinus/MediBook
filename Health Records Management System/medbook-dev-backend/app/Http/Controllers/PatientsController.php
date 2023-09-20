@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\PatientService;
 use App\Models\PatientGender;
 
-
 class PatientsController extends Controller
 {
     private $mostVisits;
@@ -19,18 +18,15 @@ class PatientsController extends Controller
     public function index()
     {
         $patients = Patient::all();
-        $this->mostVisits = 0;
+        $this->mostVisits = $patients;
         $patientsData = $patients->map(function ($patient) {
-            $currentCount = $patient->patientServices->count();
-            $this->mostVisits = $this->mostVisits > $currentCount ? $this->mostVisits : $currentCount;
             return [
                 'id' => $patient->id,
                 'name' => $patient->name,
                 'date_of_birth' => $patient->date_of_birth,
-                'gender' => $patient->patientGender->gender,
-                'services' => $patient->patientServices->pluck('service'),
+                'gender' => PatientGender::find($patient->patient_gender_id)->name,
+                'services' => $patient->patientServices->pluck('name'),
                 'general_comments' => $patient->general_comments,
-                'most_visits' => $this->mostVisits
             ];
         });
 
@@ -49,35 +45,29 @@ class PatientsController extends Controller
         $request->validate([
             'name' => 'required',
             'date_of_birth' => 'required|date',
-            'gender' => 'required|integer',
+            'gender' => 'required|string',
             'services' => 'required|string',
             'general_comments' => 'nullable',
         ]);
 
         //save new Patient to DB
         $patient = Patient::create([
-            'name' => $request['name'],
-            'date_of_birth' => $request['date_of_birth'],
-            'patient_gender_id' => $request['gender'],
-            'general_comments' => $request['general_comments'],
+            'name' => $request->name,
+            'date_of_birth' => $request->date_of_birth,
+            'patient_gender_id' => PatientGender::where('name', $request['gender'])->first()->id,
+            'general_comments' => $request->general_comments,
         ]);
 
-        $service = new PatientService;
-        $service->setServiceTypeAttribute($request['services']);
-        $patient->patientServices()->save($service);
+        $service = PatientService::where('name', $request->services)->first();
+        $patient->patientServices()->attach($service);
 
-        $gender = PatientGender::find($request['gender']);
-        $patient->patientGender()->associate($gender);
-        $patient->save();
-
-        $response = [
+        $response =  [
             'id' => $patient->id,
             'name' => $patient->name,
             'date_of_birth' => $patient->date_of_birth,
-            'gender' => $patient->patientGender->gender,
-            'services' => $patient->patientServices->pluck('service'),
+            'gender' => PatientGender::find($patient->patient_gender_id)->name,
+            'services' => $patient->patientServices->pluck('name'),
             'general_comments' => $patient->general_comments,
-            'most_visits' => $this->mostVisits
         ];
         return response()->json($response);
     }
@@ -95,38 +85,29 @@ class PatientsController extends Controller
         $request->validate([
             'name' => 'required',
             'date_of_birth' => 'required|date',
-            'gender' => 'required|integer',
+            'gender' => 'required|string',
             'services' => 'required|string',
             'general_comments' => 'nullable',
         ]);
 
         //Update
         $patient->update([
-            'name' => $request['name'],
-            'date_of_birth' => $request['date_of_birth'],
-            'patient_gender_id' => $request['gender'],
-            'general_comments' => $request['general_comments'],
+            'name' => $request->name,
+            'date_of_birth' => $request->date_of_birth,
+            'patient_gender_id' => PatientGender::where('name', $request['gender'])->first()->id,
+            'general_comments' => $request->general_comments,
         ]);
 
-        $service = new PatientService;
-        $service->setServiceTypeAttribute($request['services']);
-        $patient->patientServices()->save($service);
+        $service = PatientService::where('name', $request->services)->first();
+        $patient->patientServices()->attach($service);
 
-        $gender = PatientGender::find($request['gender']);
-        $patient->patientGender()->associate($gender);
-        $patient->save();
-
-        $currentCount = $patient->patientServices->count();
-        $this->mostVisits = $this->mostVisits > $currentCount ? $this->mostVisits : $currentCount;
-
-        $response = [
+        $response =  [
             'id' => $patient->id,
             'name' => $patient->name,
             'date_of_birth' => $patient->date_of_birth,
-            'gender' => $patient->patientGender->gender,
-            'services' => $patient->patientServices->pluck('service'),
+            'gender' => PatientGender::find($patient->patient_gender_id)->name,
+            'services' => $patient->patientServices->pluck('name'),
             'general_comments' => $patient->general_comments,
-            'most_visits' => $this->mostVisits
         ];
         return response()->json($response);
     }

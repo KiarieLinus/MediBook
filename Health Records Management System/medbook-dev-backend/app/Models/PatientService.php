@@ -9,9 +9,7 @@ class PatientService extends Model
 {
     use HasFactory;
 
-    public function setServiceTypeAttribute($value)
-    {
-        $this->attributes['service'] = in_array($value, ['Inpatient', 'Outpatient']) ? $value :
-            'Outpatient';
-    }
+    protected $fillable = [
+        'name'
+    ];
 }

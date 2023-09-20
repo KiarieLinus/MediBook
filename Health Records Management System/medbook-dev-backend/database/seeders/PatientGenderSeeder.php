@@ -15,7 +15,7 @@ class PatientGenderSeeder extends Seeder
      */
     public function run()
     {
-        PatientGender::create(['gender' => 'Male']);
-        PatientGender::create(['gender' => 'Female']);
+        PatientGender::create(['name' => 'Male', 'id' => 1]);
+        PatientGender::create(['name' => 'Female', 'id' => 2]);
     }
 }

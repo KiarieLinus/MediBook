@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoadingController, ModalController } from '@ionic/angular';
-import { take } from 'rxjs';
+import { Observable, take, tap } from 'rxjs';
 import { PatientsService } from 'src/app/services/patients.service';
 import { Patient } from 'src/app/models/patient.model';
+import { GenderService } from 'src/app/models/gender-service.model';
 
 @Component({
   selector: 'app-add-patient',
@@ -15,6 +16,8 @@ export class AddPatientComponent implements OnInit {
   isEditMode = false;
   form!: FormGroup;
   date = new Date();
+  genders!: GenderService[];
+  services!: GenderService[];
 
   constructor(
     private patientsService: PatientsService,
@@ -22,11 +25,20 @@ export class AddPatientComponent implements OnInit {
     private modalCtrl: ModalController,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.initAddPatientForm();
 
+    this.patientsService.getGenders()
+      .pipe(take(1)).subscribe(genders => {
+        this.genders = genders;
+      });
+
+    this.patientsService.getServices()
+      .pipe(take(1)).subscribe(services => {
+        this.services = services;
+      });
+
     if (this.patient) {
-      console.log(this.patient.services);
       this.isEditMode = true;
       this.setFormValues();
     }
@@ -45,7 +57,7 @@ export class AddPatientComponent implements OnInit {
   setFormValues() {
     this.form.setValue({
       name: this.patient.name,
-      gender: this.patient.gender === "Male" ? "1" : "2",
+      gender: this.patient.gender,
       date_of_birth: this.patient.date_of_birth,
       services: this.patient.services[this.patient.services.length - 1],
       general_comments: this.patient.general_comments,

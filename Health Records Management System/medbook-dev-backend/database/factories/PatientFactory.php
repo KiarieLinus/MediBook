@@ -25,7 +25,7 @@ class PatientFactory extends Factory
     {
         $gender = PatientGender::inRandomOrder()->first();
         return [
-            'name' => $this->faker->name(strtolower($gender->gender)),
+            'name' => $this->faker->name(strtolower($gender->name)),
             'date_of_birth' => $this->faker->date(),
             'general_comments' => $this->faker->text(200),
             'patient_gender_id' => $gender->id,
@@ -35,32 +35,19 @@ class PatientFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Patient $patient) {
-            //Save patient gender record
-            $genderId = $patient->patient_gender_id;
-            $gender = PatientGender::find($genderId);
-            $patient->patientGender()->associate($gender);
-            $patient->save();
-
             //Save patient service records
-            $services = ['Inpatient', 'Outpatient'];
+            $services = PatientService::all();
+            $service = $services->random();
 
-            $service1 = new PatientService;
-            $service2 = new PatientService;
-            $service1->setServiceTypeAttribute($this->faker->randomElement($services));
-            $service2->setServiceTypeAttribute($this->faker->randomElement($services));
-
-            $patient->patientServices()->saveMany([$service1, $service2]);
+            $patient->patientServices()->attach($service);
 
             //Add more services to some patients
             $hasMore = [true, false];
             if ($this->faker->randomElement($hasMore)) {
-                $service3 = new PatientService;
-                $service4 = new PatientService;
-
-                $service3->setServiceTypeAttribute($this->faker->randomElement($services));
-                $service4->setServiceTypeAttribute($this->faker->randomElement($services));
-
-                $patient->patientServices()->saveMany([$service3, $service4]);
+                $service = $services->random();
+                $patient->patientServices()->attach($service);
+                $service = $services->random();
+                $patient->patientServices()->attach($service);
             }
         });
     }
