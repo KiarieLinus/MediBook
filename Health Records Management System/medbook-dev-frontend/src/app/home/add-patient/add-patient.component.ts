@@ -4,7 +4,7 @@ import { LoadingController, ModalController } from '@ionic/angular';
 import { Observable, take, tap } from 'rxjs';
 import { PatientsService } from 'src/app/services/patients.service';
 import { Patient } from 'src/app/models/patient.model';
-import { GenderService } from 'src/app/models/gender-service.model';
+import { GenderService as GenderOrService } from 'src/app/models/gender-service.model';
 
 @Component({
   selector: 'app-add-patient',
@@ -16,8 +16,8 @@ export class AddPatientComponent implements OnInit {
   isEditMode = false;
   form!: FormGroup;
   date = new Date();
-  genders!: GenderService[];
-  services!: GenderService[];
+  genders!: GenderOrService[];
+  services!: GenderOrService[];
 
   constructor(
     private patientsService: PatientsService,
