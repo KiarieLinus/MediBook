@@ -59,7 +59,7 @@ export class AddPatientComponent implements OnInit {
       name: this.patient.name,
       gender: this.patient.gender,
       date_of_birth: this.patient.date_of_birth,
-      services: this.patient.services[this.patient.services.length - 1],
+      services: this.patient.services[0],
       general_comments: this.patient.general_comments,
     });
 

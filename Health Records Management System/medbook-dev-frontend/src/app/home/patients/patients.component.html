@@ -22,7 +22,7 @@
       [highlightBackground]="patient.services.length == mostVisits">
       <ion-col>{{patient.name}}</ion-col>
       <ion-col>{{patient.gender}}</ion-col>
-      <ion-col>{{patient.services[patient.services.length - 1]}}</ion-col>
+      <ion-col>{{patient.services[0]}}</ion-col>
       <ion-col>{{patient.date_of_birth | dateFormatPipe}}</ion-col>
       <ion-col>{{patient.general_comments ? patient.general_comments : "No comments"}}</ion-col>
     </ion-row>

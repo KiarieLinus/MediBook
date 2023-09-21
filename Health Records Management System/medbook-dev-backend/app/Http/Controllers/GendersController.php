@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PatientGender;
 use Illuminate\Http\Request;
 
-class GenderController extends Controller
+class GendersController extends Controller
 {
     /**
      * Display a listing of the resource.

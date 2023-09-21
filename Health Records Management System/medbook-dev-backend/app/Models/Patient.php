@@ -20,6 +20,6 @@ class Patient extends Model
 
     public function patientServices()
     {
-        return $this->belongsToMany(PatientService::class, 'patient_patient_services');
+        return $this->belongsToMany(PatientService::class, 'patient_patient_services')->withTimestamps();
     }
 }

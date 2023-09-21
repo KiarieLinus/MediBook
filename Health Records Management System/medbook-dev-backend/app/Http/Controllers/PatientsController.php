@@ -9,7 +9,6 @@ use App\Models\PatientGender;
 
 class PatientsController extends Controller
 {
-    private $mostVisits;
     /**
      * Display a listing of the resource.
      *
@@ -18,14 +17,15 @@ class PatientsController extends Controller
     public function index()
     {
         $patients = Patient::all();
-        $this->mostVisits = $patients;
         $patientsData = $patients->map(function ($patient) {
             return [
                 'id' => $patient->id,
                 'name' => $patient->name,
                 'date_of_birth' => $patient->date_of_birth,
                 'gender' => PatientGender::find($patient->patient_gender_id)->name,
-                'services' => $patient->patientServices->pluck('name'),
+                'services' => $patient->patientServices->sortByDesc(function ($service) {
+                    return $service->pivot->created_at;
+                })->pluck('name'),
                 'general_comments' => $patient->general_comments,
             ];
         });
@@ -106,7 +106,9 @@ class PatientsController extends Controller
             'name' => $patient->name,
             'date_of_birth' => $patient->date_of_birth,
             'gender' => PatientGender::find($patient->patient_gender_id)->name,
-            'services' => $patient->patientServices->pluck('name'),
+            'services' => $patient->patientServices->sortByDesc(function ($service) {
+                return $service->pivot->created_at;
+            })->pluck('name'),
             'general_comments' => $patient->general_comments,
         ];
         return response()->json($response);
