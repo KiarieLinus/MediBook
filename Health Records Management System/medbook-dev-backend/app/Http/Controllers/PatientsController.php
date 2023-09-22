@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PatientResource;
+use App\Http\Resources\PatientCollection;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Models\PatientService;
@@ -16,21 +18,13 @@ class PatientsController extends Controller
      */
     public function index()
     {
-        $patients = Patient::all();
-        $patientsData = $patients->map(function ($patient) {
-            return [
-                'id' => $patient->id,
-                'name' => $patient->name,
-                'date_of_birth' => $patient->date_of_birth,
-                'gender' => PatientGender::find($patient->patient_gender_id)->name,
-                'services' => $patient->patientServices->sortByDesc(function ($service) {
-                    return $service->pivot->created_at;
-                })->pluck('name'),
-                'general_comments' => $patient->general_comments,
-            ];
-        });
+        return new PatientCollection(Patient::all());
+    }
 
-        return response()->json($patientsData);
+
+    public function show(Patient $patient)
+    {
+        return new PatientResource($patient);
     }
 
     /**
@@ -44,32 +38,24 @@ class PatientsController extends Controller
         //validate the data
         $request->validate([
             'name' => 'required',
-            'date_of_birth' => 'required|date',
+            'dateOfBirth' => 'required|date',
             'gender' => 'required|string',
             'services' => 'required|string',
-            'general_comments' => 'nullable',
+            'generalComments' => 'nullable',
         ]);
 
         //save new Patient to DB
         $patient = Patient::create([
             'name' => $request->name,
-            'date_of_birth' => $request->date_of_birth,
-            'patient_gender_id' => PatientGender::where('name', $request['gender'])->first()->id,
-            'general_comments' => $request->general_comments,
+            'date_of_birth' => $request->dateOfBirth,
+            'patient_gender_id' => PatientGender::firstWhere('name', $request->gender)->id,
+            'general_comments' => $request->generalComments,
         ]);
 
         $service = PatientService::where('name', $request->services)->first();
         $patient->patientServices()->attach($service);
 
-        $response =  [
-            'id' => $patient->id,
-            'name' => $patient->name,
-            'date_of_birth' => $patient->date_of_birth,
-            'gender' => PatientGender::find($patient->patient_gender_id)->name,
-            'services' => $patient->patientServices->pluck('name'),
-            'general_comments' => $patient->general_comments,
-        ];
-        return response()->json($response);
+        return new PatientResource($patient);
     }
 
     /**
@@ -84,33 +70,23 @@ class PatientsController extends Controller
         //validate the data
         $request->validate([
             'name' => 'required',
-            'date_of_birth' => 'required|date',
+            'dateOfBirth' => 'required|date',
             'gender' => 'required|string',
             'services' => 'required|string',
-            'general_comments' => 'nullable',
+            'generalComments' => 'nullable',
         ]);
 
         //Update
         $patient->update([
             'name' => $request->name,
-            'date_of_birth' => $request->date_of_birth,
-            'patient_gender_id' => PatientGender::where('name', $request['gender'])->first()->id,
-            'general_comments' => $request->general_comments,
+            'date_of_birth' => $request->dateOfBirth,
+            'patient_gender_id' => PatientGender::firstWhere('name', $request->gender)->id,
+            'general_comments' => $request->generalComments,
         ]);
 
         $service = PatientService::where('name', $request->services)->first();
         $patient->patientServices()->attach($service);
 
-        $response =  [
-            'id' => $patient->id,
-            'name' => $patient->name,
-            'date_of_birth' => $patient->date_of_birth,
-            'gender' => PatientGender::find($patient->patient_gender_id)->name,
-            'services' => $patient->patientServices->sortByDesc(function ($service) {
-                return $service->pivot->created_at;
-            })->pluck('name'),
-            'general_comments' => $patient->general_comments,
-        ];
-        return response()->json($response);
+        return new PatientResource($patient);
     }
 }

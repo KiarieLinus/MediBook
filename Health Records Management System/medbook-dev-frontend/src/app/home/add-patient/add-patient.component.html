@@ -17,21 +17,23 @@
     </ion-item>
     <ion-item>
       <ion-select formControlName="gender" label="Gender" placeholder="Patient Gender" label-placement="stacked">
-        <ion-select-option *ngFor="let gender of genders" value={{gender.name}}>{{gender.name}}</ion-select-option>
+        <ion-select-option *ngFor="let gender of genders$ | async"
+          value={{gender.name}}>{{gender.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-input label="Date of birth" labelPlacement="stacked" formControlName="date_of_birth" type="date"
+      <ion-input label="Date of birth" labelPlacement="stacked" formControlName="dateOfBirth" type="date"
         max="{{date | date:'yyyy-MM-dd'}}"></ion-input>
     </ion-item>
     <ion-item>
       <ion-select formControlName="services" label="{{isEditMode ? 'Update current' : 'Type of'}} service"
         placeholder="Patient Service" label-placement="stacked">
-        <ion-select-option *ngFor="let service of services" value={{service.name}}>{{service.name}}</ion-select-option>
+        <ion-select-option *ngFor="let service of services$ | async"
+          value={{service.name}}>{{service.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-textarea label="General Comments" labelPlacement="stacked" formControlName="general_comments"></ion-textarea>
+      <ion-textarea label="General Comments" labelPlacement="stacked" formControlName="generalComments"></ion-textarea>
     </ion-item>
 
     <ion-button expand="block" (click)="submitPatient()" [disabled]="form.invalid">

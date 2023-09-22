@@ -1,8 +1,8 @@
 export interface Patient {
     id: number;
     name: string;
-    date_of_birth: string;
+    dateOfBirth: string;
     gender: string;
     services: string[] | string;
-    general_comments: string;
+    generalComments: string;
 }

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoadingController, ModalController } from '@ionic/angular';
-import { Observable, take, tap } from 'rxjs';
+import { take, Observable, tap } from 'rxjs';
 import { PatientsService } from 'src/app/services/patients.service';
 import { Patient } from 'src/app/models/patient.model';
 import { GenderService as GenderOrService } from 'src/app/models/gender-service.model';
@@ -16,8 +16,8 @@ export class AddPatientComponent implements OnInit {
   isEditMode = false;
   form!: FormGroup;
   date = new Date();
-  genders!: GenderOrService[];
-  services!: GenderOrService[];
+  genders$!: Observable<GenderOrService[]>;
+  services$!: Observable<GenderOrService[]>;
 
   constructor(
     private patientsService: PatientsService,
@@ -28,15 +28,15 @@ export class AddPatientComponent implements OnInit {
   async ngOnInit() {
     this.initAddPatientForm();
 
-    this.patientsService.getGenders()
-      .pipe(take(1)).subscribe(genders => {
-        this.genders = genders;
-      });
+    this.genders$ = this.patientsService.getGenders()
+      .pipe(tap(genders => {
+        return genders;
+      }));
 
-    this.patientsService.getServices()
-      .pipe(take(1)).subscribe(services => {
-        this.services = services;
-      });
+    this.services$ = this.patientsService.getServices()
+      .pipe(tap(services => {
+        return services;
+      }));
 
     if (this.patient) {
       this.isEditMode = true;
@@ -48,9 +48,9 @@ export class AddPatientComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl(null, [Validators.required]),
       gender: new FormControl(null, [Validators.required]),
-      date_of_birth: new FormControl(null, [Validators.required]),
+      dateOfBirth: new FormControl(null, [Validators.required]),
       services: new FormControl(null, [Validators.required]),
-      general_comments: new FormControl(null),
+      generalComments: new FormControl(null),
     });
   }
 
@@ -58,9 +58,9 @@ export class AddPatientComponent implements OnInit {
     this.form.setValue({
       name: this.patient.name,
       gender: this.patient.gender,
-      date_of_birth: this.patient.date_of_birth,
+      dateOfBirth: this.patient.dateOfBirth,
       services: this.patient.services[0],
-      general_comments: this.patient.general_comments,
+      generalComments: this.patient.generalComments,
     });
 
     this.form.updateValueAndValidity();
