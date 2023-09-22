@@ -20,6 +20,8 @@ class Patient extends Model
 
     public function patientServices()
     {
-        return $this->belongsToMany(PatientService::class, 'patient_patient_services')->withTimestamps();
+        return $this->belongsToMany(PatientService::class, 'patient_patient_services')
+            ->withTimestamps()
+            ->orderByPivot('created_at', 'desc');
     }
 }

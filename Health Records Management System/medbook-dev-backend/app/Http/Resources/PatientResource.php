@@ -21,9 +21,7 @@ class PatientResource extends JsonResource
             'name' => $this->name,
             'dateOfBirth' => $this->date_of_birth,
             'gender' => PatientGender::find($this->patient_gender_id)->name,
-            'services' => $this->patientServices->sortByDesc(function ($service) {
-                return $service->pivot->created_at;
-            })->pluck('name'),
+            'services' => $this->patientServices->pluck('name'),
             'generalComments' => $this->general_comments,
         ];
     }

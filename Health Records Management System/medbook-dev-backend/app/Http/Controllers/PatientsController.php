@@ -21,7 +21,6 @@ class PatientsController extends Controller
         return new PatientCollection(Patient::all());
     }
 
-
     public function show(Patient $patient)
     {
         return new PatientResource($patient);
@@ -36,26 +35,12 @@ class PatientsController extends Controller
     public function store(Request $request)
     {
         //validate the data
-        $request->validate([
-            'name' => 'required',
-            'dateOfBirth' => 'required|date',
-            'gender' => 'required|string',
-            'services' => 'required|string',
-            'generalComments' => 'nullable',
-        ]);
+        $this->validatePatient($request);
 
         //save new Patient to DB
-        $patient = Patient::create([
-            'name' => $request->name,
-            'date_of_birth' => $request->dateOfBirth,
-            'patient_gender_id' => PatientGender::firstWhere('name', $request->gender)->id,
-            'general_comments' => $request->generalComments,
-        ]);
+        $patient = Patient::create($this->updateOrCreatePatient($request));
 
-        $service = PatientService::where('name', $request->services)->first();
-        $patient->patientServices()->attach($service);
-
-        return new PatientResource($patient);
+        return new PatientResource($this->getPatientWithService($patient, $request));
     }
 
     /**
@@ -68,6 +53,16 @@ class PatientsController extends Controller
     public function update(Request $request, Patient $patient)
     {
         //validate the data
+        $this->validatePatient($request);
+
+        //Update
+        $patient->update($this->updateOrCreatePatient($request));
+
+        return new PatientResource($this->getPatientWithService($patient, $request));
+    }
+
+    private function validatePatient(Request $request)
+    {
         $request->validate([
             'name' => 'required',
             'dateOfBirth' => 'required|date',
@@ -75,18 +70,22 @@ class PatientsController extends Controller
             'services' => 'required|string',
             'generalComments' => 'nullable',
         ]);
+    }
 
-        //Update
-        $patient->update([
+    private function updateOrCreatePatient(Request $request)
+    {
+        return [
             'name' => $request->name,
             'date_of_birth' => $request->dateOfBirth,
             'patient_gender_id' => PatientGender::firstWhere('name', $request->gender)->id,
             'general_comments' => $request->generalComments,
-        ]);
+        ];
+    }
 
+    private function getPatientWithService(Patient $patient, Request $request)
+    {
         $service = PatientService::where('name', $request->services)->first();
         $patient->patientServices()->attach($service);
-
-        return new PatientResource($patient);
+        return $patient;
     }
 }
