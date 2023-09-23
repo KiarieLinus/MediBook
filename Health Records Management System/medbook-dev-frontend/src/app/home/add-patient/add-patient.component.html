@@ -16,7 +16,8 @@
       <ion-input label="Name" labelPlacement="stacked" formControlName="name"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-select formControlName="gender" label="Gender" placeholder="Patient Gender" label-placement="stacked">
+      <ion-select formControlName="gender" interface="popover" [interfaceOptions]="customPopoverOptions" label="Gender"
+        placeholder="Patient Gender" label-placement="stacked">
         <ion-select-option *ngFor="let gender of genders$ | async"
           value={{gender.name}}>{{gender.name}}</ion-select-option>
       </ion-select>
@@ -26,8 +27,9 @@
         max="{{date | date:'yyyy-MM-dd'}}"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-select formControlName="services" label="{{isEditMode ? 'Update current' : 'Type of'}} service"
-        placeholder="Patient Service" label-placement="stacked">
+      <ion-select formControlName="services" interface="popover" [interfaceOptions]="customPopoverOptions"
+        label="{{isEditMode ? 'Update current' : 'Type of'}} service" placeholder="Patient Service"
+        label-placement="stacked">
         <ion-select-option *ngFor="let service of services$ | async"
           value={{service.name}}>{{service.name}}</ion-select-option>
       </ion-select>

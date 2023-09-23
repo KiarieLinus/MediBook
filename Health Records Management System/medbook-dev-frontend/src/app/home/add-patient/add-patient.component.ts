@@ -19,6 +19,12 @@ export class AddPatientComponent implements OnInit {
   genders$!: Observable<GenderOrService[]>;
   services$!: Observable<GenderOrService[]>;
 
+  customPopoverOptions = {
+    size: 'auto',
+    side: 'bottom',
+    alignment: 'end',
+  };
+
   constructor(
     private patientsService: PatientsService,
     private loadingCtrl: LoadingController,
