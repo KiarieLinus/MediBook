@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Patient } from '../../models/patient.model';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, Subscription, map, take, tap } from 'rxjs';
 import { PatientsService } from 'src/app/services/patients.service';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { AddPatientComponent } from '../add-patient/add-patient.component';
@@ -81,14 +81,16 @@ export class PatientsComponent implements OnInit {
   }
 
   private findMostVisits() {
-    this.patients$.subscribe(
-      patients => {
-        for (let patient of patients) {
-          this.mostVisits = this.mostVisits > patient.services.length ?
-            this.mostVisits : patient.services.length;
-        }
-      }
-    )
+    const subscription: Subscription = this.patients$.pipe(take(1)).subscribe(
+      {
+        next: patients => {
+          for (let patient of patients) {
+            this.mostVisits = this.mostVisits > patient.services.length ?
+              this.mostVisits : patient.services.length;
+          }
+        },
+        complete: () => subscription.unsubscribe()
+      })
   }
 
 }
