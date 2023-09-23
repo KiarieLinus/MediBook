@@ -98,7 +98,7 @@ export class AddPatientComponent implements OnInit {
         if (this.isEditMode) {
           this.closeModal(patient);
         } else {
-          this.modalCtrl.dismiss(true);
+          this.modalCtrl.dismiss(patient);
         }
       });
   }

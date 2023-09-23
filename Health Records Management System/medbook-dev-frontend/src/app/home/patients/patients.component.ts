@@ -21,6 +21,7 @@ export class PatientsComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    console.log('started');
     const loading = await this.loadingCtrl.create({
       message: 'Loading...'
     });
@@ -42,12 +43,11 @@ export class PatientsComponent implements OnInit {
 
     await modal.present();
 
-    const { data: isNewPatient } = await modal.onDidDismiss();
-    if (isNewPatient) {
-      this.patients$ = this.patientsService.getPatients().pipe(
-        tap(patients => {
-          return patients;
-        })
+    const { data: newPatient } = await modal.onDidDismiss();
+    if (newPatient) {
+      this.patients$ = this.patients$.pipe(
+        tap(patients => [...patients, newPatient]
+        )
       )
     }
   }
@@ -65,7 +65,7 @@ export class PatientsComponent implements OnInit {
     if (updatedPatient) {
 
       this.patients$ = this.patients$.pipe(
-        map(patients => {
+        tap(patients => {
           patients.forEach(patient => {
             if (patient.id === updatedPatient.id) {
               patient = updatedPatient;
