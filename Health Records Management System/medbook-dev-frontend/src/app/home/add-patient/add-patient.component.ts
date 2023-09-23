@@ -31,7 +31,7 @@ export class AddPatientComponent implements OnInit {
     private modalCtrl: ModalController,
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.initAddPatientForm();
 
     this.genders$ = this.patientsService.getGenders()
