@@ -81,7 +81,7 @@ export class PatientsComponent implements OnInit {
   }
 
   private findMostVisits() {
-    this.patients$.pipe().subscribe(
+    this.patients$.subscribe(
       patients => {
         for (let patient of patients) {
           this.mostVisits = this.mostVisits > patient.services.length ?
