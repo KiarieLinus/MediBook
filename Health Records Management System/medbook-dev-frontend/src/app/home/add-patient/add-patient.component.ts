@@ -19,6 +19,7 @@ export class AddPatientComponent implements OnInit {
   genders$!: Observable<GenderOrService[]>;
   services$!: Observable<GenderOrService[]>;
 
+  //Adds dropdown menu effect
   customPopoverOptions = {
     size: 'auto',
     side: 'bottom',
@@ -28,21 +29,23 @@ export class AddPatientComponent implements OnInit {
   constructor(
     private patientsService: PatientsService,
     private loadingCtrl: LoadingController,
-    private modalCtrl: ModalController,
-  ) { }
+    private modalCtrl: ModalController
+  ) {}
 
   ngOnInit() {
     this.initAddPatientForm();
 
-    this.genders$ = this.patientsService.getGenders()
-      .pipe(tap(genders => {
+    this.genders$ = this.patientsService.getGenders().pipe(
+      tap((genders) => {
         return genders;
-      }));
+      })
+    );
 
-    this.services$ = this.patientsService.getServices()
-      .pipe(tap(services => {
+    this.services$ = this.patientsService.getServices().pipe(
+      tap((services) => {
         return services;
-      }));
+      })
+    );
 
     if (this.patient) {
       this.isEditMode = true;
@@ -78,30 +81,28 @@ export class AddPatientComponent implements OnInit {
 
   async submitPatient() {
     const loading = await this.loadingCtrl.create({
-      message: 'Loading...'
+      message: 'Loading...',
     });
     loading.present();
 
     let response;
 
     if (this.isEditMode) {
-      response = this.patientsService.updatePatient(this.patient.id, this.form.value);
+      response = this.patientsService.updatePatient(
+        this.patient.id,
+        this.form.value
+      );
     } else {
-      response = this.patientsService
-        .addPatient(this.form.value);
+      response = this.patientsService.addPatient(this.form.value);
     }
-    response.pipe(take(1))
-      .subscribe((patient) => {
-        this.form.reset();
-        loading.dismiss();
+    response.pipe(take(1)).subscribe((patient) => {
+      loading.dismiss();
 
-        if (this.isEditMode) {
-          this.closeModal(patient);
-        } else {
-          this.modalCtrl.dismiss(patient);
-        }
-      });
+      if (this.isEditMode) {
+        this.closeModal(patient);
+      } else {
+        this.modalCtrl.dismiss(patient);
+      }
+    });
   }
-
 }
-

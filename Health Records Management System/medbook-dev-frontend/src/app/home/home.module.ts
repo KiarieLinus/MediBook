@@ -22,6 +22,12 @@ import { HighlightBackgroundDirective } from '../directives/highlight-background
     HomePageRoutingModule,
     HttpClientModule,
   ],
-  declarations: [HomePage, PatientsComponent, AddPatientComponent, DateFormatPipe, HighlightBackgroundDirective]
+  declarations: [
+    HomePage,
+    PatientsComponent,
+    AddPatientComponent,
+    DateFormatPipe,
+    HighlightBackgroundDirective,
+  ],
 })
-export class HomePageModule { }
+export class HomePageModule {}

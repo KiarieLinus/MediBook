@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Patient } from '../../models/patient.model';
-import { Observable, Subscription, map, take, tap } from 'rxjs';
+import { Observable, Subscription, take, tap } from 'rxjs';
 import { PatientsService } from 'src/app/services/patients.service';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { AddPatientComponent } from '../add-patient/add-patient.component';
@@ -17,22 +17,21 @@ export class PatientsComponent implements OnInit {
   constructor(
     private patientsService: PatientsService,
     private loadingCtrl: LoadingController,
-    private modalCtrl: ModalController,
-  ) { }
+    private modalCtrl: ModalController
+  ) {}
 
   async ngOnInit() {
-    console.log('started');
     const loading = await this.loadingCtrl.create({
-      message: 'Loading...'
+      message: 'Loading...',
     });
     loading.present();
 
     this.patients$ = this.patientsService.getPatients().pipe(
-      tap(patients => {
+      tap((patients) => {
         loading.dismiss();
         return patients;
       })
-    )
+    );
     this.findMostVisits();
   }
 
@@ -46,16 +45,15 @@ export class PatientsComponent implements OnInit {
     const { data: newPatient } = await modal.onDidDismiss();
     if (newPatient) {
       this.patients$ = this.patients$.pipe(
-        tap(patients => [...patients, newPatient]
-        )
-      )
+        tap((patients) => [...patients, newPatient])
+      );
     }
   }
 
   async openEditModal(patient: Patient) {
     const modal = await this.modalCtrl.create({
       component: AddPatientComponent,
-      componentProps: { patient: patient }
+      componentProps: { patient: patient },
     });
 
     await modal.present();
@@ -63,10 +61,9 @@ export class PatientsComponent implements OnInit {
     const { data: updatedPatient } = await modal.onDidDismiss();
 
     if (updatedPatient) {
-
       this.patients$ = this.patients$.pipe(
-        tap(patients => {
-          patients.forEach(patient => {
+        tap((patients) => {
+          patients.forEach((patient) => {
             if (patient.id === updatedPatient.id) {
               patient = updatedPatient;
             }
@@ -74,23 +71,25 @@ export class PatientsComponent implements OnInit {
           });
           return patients;
         })
-      )
-      this.mostVisits = this.mostVisits > updatedPatient.services.length ?
-        this.mostVisits : updatedPatient.services.length;
+      );
+      this.mostVisits =
+        this.mostVisits > updatedPatient.services.length
+          ? this.mostVisits
+          : updatedPatient.services.length;
     }
   }
 
   private findMostVisits() {
-    const subscription: Subscription = this.patients$.pipe(take(1)).subscribe(
-      {
-        next: patients => {
-          for (let patient of patients) {
-            this.mostVisits = this.mostVisits > patient.services.length ?
-              this.mostVisits : patient.services.length;
-          }
-        },
-        complete: () => subscription.unsubscribe()
-      })
+    const subscription: Subscription = this.patients$.pipe(take(1)).subscribe({
+      next: (patients) => {
+        for (let patient of patients) {
+          this.mostVisits =
+            this.mostVisits > patient.services.length
+              ? this.mostVisits
+              : patient.services.length;
+        }
+      },
+      complete: () => subscription.unsubscribe(),
+    });
   }
-
 }

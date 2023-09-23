@@ -5,30 +5,33 @@ import { Patient } from '../models/patient.model';
 import { GenderService } from '../models/gender-service.model';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class PatientsService {
-    apiUrl = "http://localhost:8000/api";
+  apiUrl = 'http://localhost:8000/api';
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-    getPatients(): Observable<Patient[]> {
-        return this.http.get<Patient[]>(`${this.apiUrl}/patients`);
-    }
+  getPatients(): Observable<Patient[]> {
+    return this.http.get<Patient[]>(`${this.apiUrl}/patients`);
+  }
 
-    addPatient(patient: Patient): Observable<Patient> {
-        return this.http.post<Patient>(`${this.apiUrl}/patients`, patient);
-    }
+  addPatient(patient: Patient): Observable<Patient> {
+    return this.http.post<Patient>(`${this.apiUrl}/patients`, patient);
+  }
 
-    updatePatient(patientId: number, patient: Patient): Observable<Patient> {
-        return this.http.put<Patient>(`${this.apiUrl}/patients/${patientId}`, patient);
-    }
+  updatePatient(patientId: number, patient: Patient): Observable<Patient> {
+    return this.http.put<Patient>(
+      `${this.apiUrl}/patients/${patientId}`,
+      patient
+    );
+  }
 
-    getGenders(): Observable<GenderService[]> {
-        return this.http.get<GenderService[]>(`${this.apiUrl}/genders`)
-    }
+  getGenders(): Observable<GenderService[]> {
+    return this.http.get<GenderService[]>(`${this.apiUrl}/genders`);
+  }
 
-    getServices(): Observable<GenderService[]> {
-        return this.http.get<GenderService[]>(`${this.apiUrl}/services`)
-    }
+  getServices(): Observable<GenderService[]> {
+    return this.http.get<GenderService[]>(`${this.apiUrl}/services`);
+  }
 }

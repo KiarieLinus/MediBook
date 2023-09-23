@@ -1,7 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>{{isEditMode ? 'Update' : 'Add'}} a patient</ion-title>
-
+    <ion-title>{{ isEditMode ? "Update" : "Add" }} a patient</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="closeModal(null)">
         <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -13,33 +12,67 @@
 <ion-content class="ion-padding" [fullscreen]="true">
   <form [formGroup]="form">
     <ion-item>
-      <ion-input label="Name" labelPlacement="stacked" formControlName="name"></ion-input>
+      <ion-input
+        label="Name"
+        labelPlacement="stacked"
+        formControlName="name"
+      ></ion-input>
     </ion-item>
     <ion-item>
-      <ion-select formControlName="gender" interface="popover" [interfaceOptions]="customPopoverOptions" label="Gender"
-        placeholder="Patient Gender" label-placement="stacked">
-        <ion-select-option *ngFor="let gender of genders$ | async"
-          value={{gender.name}}>{{gender.name}}</ion-select-option>
+      <ion-select
+        formControlName="gender"
+        interface="popover"
+        [interfaceOptions]="customPopoverOptions"
+        label="Gender"
+        placeholder="Patient Gender"
+        label-placement="stacked"
+      >
+        <ion-select-option
+          *ngFor="let gender of genders$ | async"
+          value="{{ gender.name }}"
+          >{{ gender.name }}</ion-select-option
+        >
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-input label="Date of birth" labelPlacement="stacked" formControlName="dateOfBirth" type="date"
-        max="{{date | date:'yyyy-MM-dd'}}"></ion-input>
+      <ion-input
+        label="Date of birth"
+        labelPlacement="stacked"
+        formControlName="dateOfBirth"
+        type="date"
+        max="{{ date | date : 'yyyy-MM-dd' }}"
+      ></ion-input>
     </ion-item>
     <ion-item>
-      <ion-select formControlName="services" interface="popover" [interfaceOptions]="customPopoverOptions"
-        label="{{isEditMode ? 'Update current' : 'Type of'}} service" placeholder="Patient Service"
-        label-placement="stacked">
-        <ion-select-option *ngFor="let service of services$ | async"
-          value={{service.name}}>{{service.name}}</ion-select-option>
+      <ion-select
+        formControlName="services"
+        interface="popover"
+        [interfaceOptions]="customPopoverOptions"
+        label="{{ isEditMode ? 'Update current' : 'Type of' }} service"
+        placeholder="Patient Service"
+        label-placement="stacked"
+      >
+        <ion-select-option
+          *ngFor="let service of services$ | async"
+          value="{{ service.name }}"
+          >{{ service.name }}</ion-select-option
+        >
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-textarea label="General Comments" labelPlacement="stacked" formControlName="generalComments"></ion-textarea>
+      <ion-textarea
+        label="General Comments"
+        labelPlacement="stacked"
+        formControlName="generalComments"
+      ></ion-textarea>
     </ion-item>
 
-    <ion-button expand="block" (click)="submitPatient()" [disabled]="form.invalid">
-      {{isEditMode ? 'Update' : 'Save'}} patient
+    <ion-button
+      expand="block"
+      (click)="submitPatient()"
+      [disabled]="form.invalid"
+    >
+      {{ isEditMode ? "Update" : "Save" }} patient
     </ion-button>
   </form>
 </ion-content>
