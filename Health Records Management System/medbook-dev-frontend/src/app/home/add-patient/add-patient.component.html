@@ -18,6 +18,9 @@
         formControlName="name"
       ></ion-input>
     </ion-item>
+    <div class="alert" *ngIf="form.get('name')?.invalid && isOnSubmit">
+      Name is required.
+    </div>
     <ion-item>
       <ion-select
         formControlName="gender"
@@ -34,6 +37,9 @@
         >
       </ion-select>
     </ion-item>
+    <div class="alert" *ngIf="form.get('gender')?.invalid && isOnSubmit">
+      Gender is required.
+    </div>
     <ion-item>
       <ion-input
         label="Date of birth"
@@ -43,6 +49,9 @@
         max="{{ date | date : 'yyyy-MM-dd' }}"
       ></ion-input>
     </ion-item>
+    <div class="alert" *ngIf="form.get('dateOfBirth')?.invalid && isOnSubmit">
+      <span>Date of birth is required.</span>
+    </div>
     <ion-item>
       <ion-select
         formControlName="services"
@@ -59,6 +68,9 @@
         >
       </ion-select>
     </ion-item>
+    <div class="alert" *ngIf="form.get('services')?.invalid && isOnSubmit">
+      Type of Service is required.
+    </div>
     <ion-item>
       <ion-textarea
         label="General Comments"
@@ -67,11 +79,7 @@
       ></ion-textarea>
     </ion-item>
 
-    <ion-button
-      expand="block"
-      (click)="submitPatient()"
-      [disabled]="form.invalid"
-    >
+    <ion-button expand="block" (click)="submitPatient()">
       {{ isEditMode ? "Update" : "Save" }} patient
     </ion-button>
   </form>

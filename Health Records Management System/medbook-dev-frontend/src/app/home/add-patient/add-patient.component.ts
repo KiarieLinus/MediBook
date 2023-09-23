@@ -14,6 +14,7 @@ import { GenderService as GenderOrService } from 'src/app/models/gender-service.
 export class AddPatientComponent implements OnInit {
   @Input() patient!: Patient;
   isEditMode = false;
+  isOnSubmit = false;
   form!: FormGroup;
   date = new Date();
   genders$!: Observable<GenderOrService[]>;
@@ -80,29 +81,32 @@ export class AddPatientComponent implements OnInit {
   }
 
   async submitPatient() {
-    const loading = await this.loadingCtrl.create({
-      message: 'Loading...',
-    });
-    loading.present();
+    this.isOnSubmit = true;
+    if (this.form.valid) {
+      const loading = await this.loadingCtrl.create({
+        message: 'Loading...',
+      });
+      loading.present();
 
-    let response;
-
-    if (this.isEditMode) {
-      response = this.patientsService.updatePatient(
-        this.patient.id,
-        this.form.value
-      );
-    } else {
-      response = this.patientsService.addPatient(this.form.value);
-    }
-    response.pipe(take(1)).subscribe((patient) => {
-      loading.dismiss();
+      let response;
 
       if (this.isEditMode) {
-        this.closeModal(patient);
+        response = this.patientsService.updatePatient(
+          this.patient.id,
+          this.form.value
+        );
       } else {
-        this.modalCtrl.dismiss(patient);
+        response = this.patientsService.addPatient(this.form.value);
       }
-    });
+      response.pipe(take(1)).subscribe((patient) => {
+        loading.dismiss();
+
+        if (this.isEditMode) {
+          this.closeModal(patient);
+        } else {
+          this.modalCtrl.dismiss(patient);
+        }
+      });
+    }
   }
 }
