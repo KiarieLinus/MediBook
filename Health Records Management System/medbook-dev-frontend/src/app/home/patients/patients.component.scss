@@ -12,6 +12,10 @@ ion-grid {
     border: 1px solid black;
     border-bottom: 0;
     border-right: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 30em;
   }
 
   ion-col:last-child {
