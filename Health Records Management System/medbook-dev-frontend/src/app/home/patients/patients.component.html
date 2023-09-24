@@ -15,8 +15,8 @@
       <ion-col>Name</ion-col>
       <ion-col>Gender</ion-col>
       <ion-col>Type Of Service</ion-col>
-      <ion-col>Date Of Birth</ion-col>
-      <ion-col>General comments</ion-col>
+      <ion-col class="ion-hide-sm-down">Date Of Birth</ion-col>
+      <ion-col class="ion-hide-md-down">General comments</ion-col>
     </ion-row>
     <ion-row
       *ngFor="let patient of patients$ | async"
@@ -26,8 +26,10 @@
       <ion-col>{{ patient.name }}</ion-col>
       <ion-col>{{ patient.gender }}</ion-col>
       <ion-col>{{ patient.services[0] }}</ion-col>
-      <ion-col>{{ patient.dateOfBirth | dateFormatPipe }}</ion-col>
-      <ion-col>{{
+      <ion-col class="ion-hide-sm-down">{{
+        patient.dateOfBirth | dateFormatPipe
+      }}</ion-col>
+      <ion-col class="ion-hide-md-down">{{
         patient.generalComments ? patient.generalComments : "No comments"
       }}</ion-col>
     </ion-row>

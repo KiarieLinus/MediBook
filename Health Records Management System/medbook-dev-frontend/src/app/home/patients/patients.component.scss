@@ -22,3 +22,19 @@ ion-grid {
     border-bottom: 1px solid black;
   }
 }
+
+@media screen and (max-width: 768px) {
+  ion-grid {
+    ion-col:nth-last-child(2) {
+      border-right: 1px solid black;
+    }
+  }
+}
+
+@media screen and (max-width: 576px) {
+  ion-grid {
+    ion-col:nth-last-child(3) {
+      border-right: 1px solid black;
+    }
+  }
+}
