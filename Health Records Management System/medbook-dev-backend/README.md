@@ -4,7 +4,9 @@
 
 ## Installation
 
-Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/9.x)
+Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/7.x/installation).
+
+Alternatively you can use [Docker](https://laravel.com/docs/9.x/installation).
 
 Clone the repository
 
