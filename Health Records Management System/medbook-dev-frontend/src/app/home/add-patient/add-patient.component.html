@@ -40,22 +40,24 @@
     <div class="alert" *ngIf="form.get('gender')?.invalid && isOnSubmit">
       Gender is required.
     </div>
-    <ion-item>
+    <ion-item button="true" id="open-date-input">
       <ion-label position="stacked">Date of birth</ion-label>
       <ng-container *ngIf="form.get('dateOfBirth')?.invalid; else elseTemplate">
         <span class="pick-date-span">Pick a date</span>
       </ng-container>
       <ng-template #elseTemplate>
-        {{ form.get("dateOfBirth")?.value | date : "dd-MMM-yyyy" }}
+        <span class="date-span">{{
+          form.get("dateOfBirth")?.value | date : "dd-MMM-yyyy"
+        }}</span>
       </ng-template>
 
-      <ion-icon
-        button="true"
-        id="open-date-input"
-        slot="end"
-        name="calendar"
-      ></ion-icon>
-      <ion-popover trigger="open-date-input" [keepContentsMounted]="true">
+      <ion-icon button="true" slot="end" name="calendar"></ion-icon>
+      <ion-popover
+        side="{{ customPopoverOptions.side }}"
+        alignment="{{ customPopoverOptions.alignment }}"
+        trigger="open-date-input"
+        [keepContentsMounted]="true"
+      >
         <ng-template>
           <ion-datetime
             formControlName="dateOfBirth"
