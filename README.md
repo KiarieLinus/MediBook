@@ -9,6 +9,7 @@ MediBook is a health records management system built using Laravel in the backen
 | Description                                                  | Screen                                                                                                              |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
 | Patients/home screen with those with most visits highlighted | ![patients](https://github.com/KiarieLinus/MediBook/assets/40097879/2c252b71-4d88-4a5e-9dc0-eed555564ec8)           |
+| Patients/home screen with those with most visits highlighted in landscape | ![patients-land](https://github.com/KiarieLinus/MediBook/assets/40097879/90703fd5-c651-4be2-975d-5d9b38a0402f) |
 | Add Patient Modal view                                       | ![add-patient](https://github.com/KiarieLinus/MediBook/assets/40097879/fc609934-07de-43dd-8149-10777a18669c)        |
 | Gender dropdown menu                                         | ![gender-menu](https://github.com/KiarieLinus/MediBook/assets/40097879/089b19b1-db65-4f73-97ed-a88338eea728)        |
 | Date popover                                                 | ![date-pop](https://github.com/KiarieLinus/MediBook/assets/40097879/ff07650b-bab9-4539-afa9-2159a9fa5a0e)           |
