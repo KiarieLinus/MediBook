@@ -3,9 +3,14 @@ ion-grid {
   border-collapse: collapse;
   border-style: hidden;
 
+  ion-row {
+    cursor: pointer;
+  }
+
   ion-row:first-child {
     background-color: #2dd36f;
     font-weight: bold;
+    cursor: default;
   }
 
   ion-col {
