@@ -6,7 +6,6 @@
 
 Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/9.x)
 
-
 Clone the repository
 
     git clone https://github.com/KiarieLinus/MediBook.git
@@ -19,7 +18,7 @@ Install all the dependencies using composer
 
     composer install
 
-Run the database migrations (**Set the database connection in .env before migrating**)
+Run the database migrations (**Set the database connection in [.env](#environment-variables) before migrating**)
 
     php artisan migrate
 
@@ -28,7 +27,7 @@ Start the local development server
     php artisan serve
 
 You can now access the server at http://localhost:8000
-    
+
 **Make sure you set the correct database connection information before running the migrations**
 
     php artisan migrate
@@ -44,16 +43,19 @@ Run the database seeder and you're done
 
     php artisan db:seed
 
-***Note*** : It's recommended to have a clean database before seeding. You can refresh your migrations at any point to clean the database by running the following command
+**_Note_** : It's recommended to have a clean database before seeding. You can refresh your migrations at any point to clean the database by running the following command
 
     php artisan migrate:refresh
-    
+
 ## API Endpoints
 
-- GET /api/patients: Get all patients.
-- POST /api/patients: Create a new patient with associated gender and service.
-- PUT /api/patients/{patientId}: Update patient details.
+-   GET /api/patients: Get all patients.
+-   GET /api/genders: Get all genders.
+-   GET /api/services: Get all types of services.
+-   GET /api/patients/{patient}: Get single patient.
+-   POST /api/patients: Create a new patient with associated gender and service.
+-   PUT /api/patients/{patient}: Update patient details.
 
 ## Environment variables
 
-- `.env` - Environment variables can be set in this file
+-   `.env` - Environment variables can be set in this file
