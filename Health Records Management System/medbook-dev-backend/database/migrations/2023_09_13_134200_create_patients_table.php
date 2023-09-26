@@ -19,9 +19,10 @@ return new class extends Migration
             $table->string('name');
             $table->date('date_of_birth');
             $table->longText('general_comments')->nullable();
-            $table->foreignIdFor(PatientGender::class)
-                ->constrained()
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('patient_gender_id');
+            $table->foreign('patient_gender_id')->references('id')
+                ->on('patient_genders')
+                ->onDelete('restrict');
             $table->timestamps();
         });
     }

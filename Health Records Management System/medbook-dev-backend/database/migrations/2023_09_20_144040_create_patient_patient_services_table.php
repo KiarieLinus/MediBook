@@ -17,12 +17,14 @@ return new class extends Migration
     {
         Schema::create('patient_patient_services', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Patient::class)
-                ->constrained()
-                ->onDelete('cascade');
-            $table->foreignIdFor(PatientService::class)
-                ->constrained()
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('patient_id');
+            $table->foreign('patient_id')->references('id')
+                ->on('patients')
+                ->onDelete('restrict');
+            $table->unsignedBigInteger('patient_service_id');
+            $table->foreign('patient_service_id')->references('id')
+                ->on('patient_services')
+                ->onDelete('restrict');
             $table->timestamps();
         });
     }

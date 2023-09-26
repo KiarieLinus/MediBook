@@ -7,3 +7,19 @@ ion-item {
   color: var(--ion-color-danger);
   margin-bottom: 10px;
 }
+
+.pick-date-span {
+  color: black;
+  opacity: 0.6;
+}
+
+ion-datetime {
+  --background: rgb(245, 235, 247);
+  --background-rgb: 245, 235, 247;
+  --wheel-highlight-background: rgb(218, 216, 255);
+  --wheel-fade-background-rgb: 245, 235, 247;
+}
+
+ion-datetime::part(wheel-item) {
+  color: var(--ion-color-primary);
+}
