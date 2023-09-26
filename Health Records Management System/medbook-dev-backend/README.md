@@ -6,12 +6,6 @@
 
 Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/7.x/installation).
 
-Alternatively you can use [Docker](https://laravel.com/docs/9.x/installation).
-
-Clone the repository
-
-    git clone https://github.com/KiarieLinus/MediBook.git
-
 Switch to the repo folder
 
     cd medbook-dev-backend
@@ -19,6 +13,14 @@ Switch to the repo folder
 Install all the dependencies using composer
 
     composer install
+
+Copy the .env.example file and make the required configuration changes in your .env file
+
+    cp .env.example .env
+
+Generate a new application key
+
+    php artisan key:generate
 
 Run the database migrations (**Set the database connection in [.env](#environment-variables) before migrating**)
 
@@ -39,7 +41,8 @@ You can now access the server at http://localhost:8000
 
 **Populate the database with seed data for patients, genders and services. This can help you to quickly start testing the api or couple a frontend and start using it with ready content.**
 
-Open the [seeders](https://github.com/KiarieLinus/MediBook/tree/main/Health%20Records%20Management%20System/medbook-dev-backend/database/seeders) and set the property values as per your requirement
+Open the seeders located at
+`/medbook-dev-backend/database/seeders` and set the property values as per your requirements.
 
 Run the database seeder and you're done
 
