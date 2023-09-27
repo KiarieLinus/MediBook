@@ -36,17 +36,9 @@ export class AddPatientComponent implements OnInit {
   ngOnInit() {
     this.initAddPatientForm();
 
-    this.genders$ = this.patientsService.getGenders().pipe(
-      tap((genders) => {
-        return genders;
-      })
-    );
+    this.genders$ = this.patientsService.getGenders();
 
-    this.services$ = this.patientsService.getServices().pipe(
-      tap((services) => {
-        return services;
-      })
-    );
+    this.services$ = this.patientsService.getServices();
 
     if (this.patient) {
       this.isEditMode = true;
