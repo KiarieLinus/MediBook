@@ -100,12 +100,7 @@ export class AddPatientComponent implements OnInit {
       }
       response.pipe(take(1)).subscribe((patient) => {
         loading.dismiss();
-
-        if (this.isEditMode) {
-          this.closeModal(patient);
-        } else {
-          this.modalCtrl.dismiss(patient);
-        }
+        this.closeModal(patient);
       });
     }
   }
