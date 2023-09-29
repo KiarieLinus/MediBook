@@ -1,7 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { LoadingController, ModalController } from '@ionic/angular';
-import { take, Observable, tap } from 'rxjs';
+import { ModalController } from '@ionic/angular';
+import { Observable } from 'rxjs';
 import { PatientsService } from 'src/app/services/patients.service';
 import { Patient } from 'src/app/models/patient.model';
 import { GenderService as GenderOrService } from 'src/app/models/gender-service.model';
@@ -10,9 +15,10 @@ import { GenderService as GenderOrService } from 'src/app/models/gender-service.
   selector: 'app-add-patient',
   templateUrl: './add-patient.component.html',
   styleUrls: ['./add-patient.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddPatientComponent implements OnInit {
-  @Input() patient!: Patient;
+  @Input() patient: Patient | undefined | null;
   isEditMode = false;
   isOnSubmit = false;
   form!: FormGroup;
@@ -29,7 +35,6 @@ export class AddPatientComponent implements OnInit {
 
   constructor(
     private patientsService: PatientsService,
-    private loadingCtrl: LoadingController,
     private modalCtrl: ModalController
   ) {}
 
@@ -58,42 +63,30 @@ export class AddPatientComponent implements OnInit {
 
   setFormValues() {
     this.form.setValue({
-      name: this.patient.name,
-      gender: this.patient.gender,
-      dateOfBirth: this.patient.dateOfBirth,
-      services: this.patient.services[0],
-      generalComments: this.patient.generalComments,
+      name: this.patient!.name,
+      gender: this.patient!.gender,
+      dateOfBirth: this.patient!.dateOfBirth,
+      services: this.patient!.services[0],
+      generalComments: this.patient!.generalComments,
     });
 
     this.form.updateValueAndValidity();
   }
 
-  closeModal(data: null | Patient) {
-    this.modalCtrl.dismiss(data);
+  closeModal() {
+    this.modalCtrl.dismiss();
   }
 
   async submitPatient() {
+    this.form.markAllAsTouched();
     this.isOnSubmit = true;
     if (this.form.valid) {
-      const loading = await this.loadingCtrl.create({
-        message: 'Loading...',
-      });
-      loading.present();
-
-      let response;
-
       if (this.isEditMode) {
-        response = this.patientsService.updatePatient(
-          this.patient.id,
-          this.form.value
-        );
+        this.patientsService.updatePatient(this.patient!.id, this.form.value);
       } else {
-        response = this.patientsService.addPatient(this.form.value);
+        this.patientsService.addPatient(this.form.value);
       }
-      response.pipe(take(1)).subscribe((patient) => {
-        loading.dismiss();
-        this.closeModal(patient);
-      });
+      this.closeModal();
     }
   }
 }

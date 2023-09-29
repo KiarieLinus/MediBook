@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>{{ isEditMode ? "Update" : "Add" }} a patient</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal(null)">
+      <ion-button (click)="closeModal()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -40,8 +40,20 @@
     <div class="alert" *ngIf="form.get('gender')?.invalid && isOnSubmit">
       Gender is required.
     </div>
-    <ion-item button="true" id="open-date-input">
-      <ion-label position="stacked">Date of birth</ion-label>
+    <ion-item
+      button="true"
+      id="open-date-input"
+      (click)="form.get('dateOfBirth')?.markAsTouched()"
+    >
+      <ion-label
+        color="{{
+          form.get('dateOfBirth')?.invalid && form.get('dateOfBirth')?.touched
+            ? 'danger'
+            : 'dark'
+        }}"
+        position="stacked"
+        >Date of birth</ion-label
+      >
       <ng-container *ngIf="form.get('dateOfBirth')?.invalid; else elseTemplate">
         <span class="pick-date-span">Pick a date</span>
       </ng-container>
@@ -51,7 +63,16 @@
         }}</span>
       </ng-template>
 
-      <ion-icon button="true" slot="end" name="calendar"></ion-icon>
+      <ion-icon
+        button="true"
+        slot="end"
+        name="calendar"
+        color="{{
+          form.get('dateOfBirth')?.invalid && form.get('dateOfBirth')?.touched
+            ? 'danger'
+            : 'dark'
+        }}"
+      ></ion-icon>
       <ion-popover
         side="{{ customPopoverOptions.side }}"
         alignment="{{ customPopoverOptions.alignment }}"

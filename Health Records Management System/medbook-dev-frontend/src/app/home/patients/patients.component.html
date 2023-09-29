@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>Patients</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="openAddModal()">
+      <ion-button (click)="modalIsOpen$.next(true)">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -20,8 +20,8 @@
     </ion-row>
     <ion-row
       *ngFor="let patient of patients$ | async"
-      (click)="openEditModal(patient)"
-      [highlightBackground]="patient.services.length === mostVisits"
+      (click)="modalProps$.next(patient); modalIsOpen$.next(true)"
+      [highlightBackground]="patient.services.length === (mostVisits$ | async)"
     >
       <ion-col>{{ patient.name }}</ion-col>
       <ion-col>{{ patient.gender }}</ion-col>
@@ -35,3 +35,12 @@
     </ion-row>
   </ion-grid>
 </ion-content>
+
+<ion-modal
+  [isOpen]="modalIsOpen$ | async"
+  (ionModalDidDismiss)="handleDismiss($event)"
+>
+  <ng-template>
+    <app-add-patient [patient]="modalProps$ | async"></app-add-patient>
+  </ng-template>
+</ion-modal>

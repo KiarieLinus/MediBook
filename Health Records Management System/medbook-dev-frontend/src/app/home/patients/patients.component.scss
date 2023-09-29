@@ -8,7 +8,7 @@ ion-grid {
   }
 
   ion-row:first-child {
-    background-color: #2dd36f;
+    background-color: var(--ion-color-success);
     font-weight: bold;
     cursor: default;
   }
