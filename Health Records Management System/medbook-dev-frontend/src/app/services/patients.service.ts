@@ -6,6 +6,11 @@ import { GenderService } from '../models/gender-service.model';
 import { IonLoaderService } from './ion-loader.service';
 import { IonToastService } from './ion-toast.service';
 
+interface ErrorWrapper {
+  status: number;
+  context: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -30,7 +35,10 @@ export class PatientsService {
       .get<Patient[]>(`${this.apiUrl}/patients`)
       .pipe(
         catchError((err) =>
-          of({ status: err.status as number, context: 'patients' })
+          of<ErrorWrapper>({
+            status: err.status as number,
+            context: 'patients',
+          })
         )
       )
       .subscribe((patients) => {
@@ -54,7 +62,7 @@ export class PatientsService {
       .get<GenderService[]>(`${this.apiUrl}/genders`)
       .pipe(
         catchError((err) =>
-          of({ status: err.status as number, context: 'genders' })
+          of<ErrorWrapper>({ status: err.status as number, context: 'genders' })
         )
       )
       .subscribe((genders) => {
@@ -69,7 +77,10 @@ export class PatientsService {
       .get<GenderService[]>(`${this.apiUrl}/services`)
       .pipe(
         catchError((err) =>
-          of({ status: err.status as number, context: 'services' })
+          of<ErrorWrapper>({
+            status: err.status as number,
+            context: 'services',
+          })
         )
       )
       .subscribe((services) => {
@@ -97,7 +108,10 @@ export class PatientsService {
       .post<Patient>(`${this.apiUrl}/patients`, patient)
       .pipe(
         catchError((err) => {
-          return of({ status: err.status as number, context: 'create' });
+          return of<ErrorWrapper>({
+            status: err.status as number,
+            context: 'create',
+          });
         })
       )
       .subscribe((patient) => {
@@ -117,7 +131,10 @@ export class PatientsService {
       .put<Patient>(`${this.apiUrl}/patients/${patientId}`, patient)
       .pipe(
         catchError((err) => {
-          return of({ status: err.status as number, context: 'update' });
+          return of<ErrorWrapper>({
+            status: err.status as number,
+            context: 'update',
+          });
         })
       )
       .subscribe((newPatient) => {
