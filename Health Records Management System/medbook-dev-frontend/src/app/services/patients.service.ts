@@ -45,9 +45,7 @@ export class PatientsService {
           }
           this.mostVisits$.next(mostVisits);
         } else {
-          this.toast.showToast(
-            this.handleError(patients.status, patients.context)
-          );
+          this.handleError(patients.status, patients.context);
         }
         this.loader.dismissLoader();
       });
@@ -63,9 +61,7 @@ export class PatientsService {
         if (genders instanceof Array) {
           this.genders$.next(genders);
         } else {
-          this.toast.showToast(
-            this.handleError(genders.status, genders.context)
-          );
+          this.handleError(genders.status, genders.context);
         }
       });
 
@@ -80,9 +76,7 @@ export class PatientsService {
         if (services instanceof Array) {
           this.services$.next(services);
         } else {
-          this.toast.showToast(
-            this.handleError(services.status, services.context)
-          );
+          this.handleError(services.status, services.context);
         }
       });
   }
@@ -110,9 +104,7 @@ export class PatientsService {
         if ('id' in patient) {
           this.patients$.next([...this.patients$.value, patient]);
         } else {
-          this.toast.showToast(
-            this.handleError(patient.status, patient.context)
-          );
+          this.handleError(patient.status, patient.context);
         }
         this.loader.dismissLoader();
       });
@@ -138,9 +130,7 @@ export class PatientsService {
           );
           this.patients$.next(updatedPatients);
         } else {
-          this.toast.showToast(
-            this.handleError(newPatient.status, newPatient.context)
-          );
+          this.handleError(newPatient.status, newPatient.context);
         }
         this.loader.dismissLoader();
       });
@@ -154,13 +144,16 @@ export class PatientsService {
     return this.services$;
   }
 
-  private handleError(status: number, source: string): string {
-    return status === 0
-      ? `The server is down try again later.`
-      : status === 404
-      ? `The ${source} data could not be fetched.`
-      : status === 422
-      ? `Invalid data entry on ${source}`
-      : `Unknown error occured.`;
+  private handleError(status: number, source: string) {
+    let message =
+      status === 0
+        ? `The server is down try again later.`
+        : status === 404
+        ? `The ${source} data could not be fetched.`
+        : status === 422
+        ? `Invalid data entry on ${source}`
+        : `Unknown error occured.`;
+
+    this.toast.showToast(message);
   }
 }
