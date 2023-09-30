@@ -77,7 +77,7 @@ export class AddPatientComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  async submitPatient() {
+  submitPatient() {
     this.form.markAllAsTouched();
     this.isOnSubmit = true;
     if (this.form.valid) {

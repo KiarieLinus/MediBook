@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of } from 'rxjs';
 import { Patient } from '../models/patient.model';
 import { GenderService } from '../models/gender-service.model';
 import { IonLoaderService } from './ion-loader.service';
+import { IonToastService } from './ion-toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,35 +17,73 @@ export class PatientsService {
   private services$ = new BehaviorSubject<GenderService[]>([]);
   private mostVisits$ = new BehaviorSubject(0);
 
-  constructor(private http: HttpClient, private loader: IonLoaderService) {}
+  constructor(
+    private http: HttpClient,
+    private loader: IonLoaderService,
+    private toast: IonToastService
+  ) {}
 
   public init() {
     this.loader.presentLoader();
+
     this.http
       .get<Patient[]>(`${this.apiUrl}/patients`)
+      .pipe(
+        catchError((err) =>
+          of({ status: err.status as number, context: 'patients' })
+        )
+      )
       .subscribe((patients) => {
-        let mostVisits = 0;
-        this.patients$.next(patients);
-        for (let patient of patients) {
-          mostVisits =
-            mostVisits > patient.services.length
-              ? mostVisits
-              : patient.services.length;
+        if (patients instanceof Array) {
+          let mostVisits = 0;
+          this.patients$.next(patients);
+          for (let patient of patients) {
+            mostVisits =
+              mostVisits > patient.services.length
+                ? mostVisits
+                : patient.services.length;
+          }
+          this.mostVisits$.next(mostVisits);
+        } else {
+          this.toast.showToast(
+            this.handleError(patients.status, patients.context)
+          );
         }
-        this.mostVisits$.next(mostVisits);
         this.loader.dismissLoader();
       });
 
     this.http
       .get<GenderService[]>(`${this.apiUrl}/genders`)
+      .pipe(
+        catchError((err) =>
+          of({ status: err.status as number, context: 'genders' })
+        )
+      )
       .subscribe((genders) => {
-        this.genders$.next(genders);
+        if (genders instanceof Array) {
+          this.genders$.next(genders);
+        } else {
+          this.toast.showToast(
+            this.handleError(genders.status, genders.context)
+          );
+        }
       });
 
     this.http
       .get<GenderService[]>(`${this.apiUrl}/services`)
+      .pipe(
+        catchError((err) =>
+          of({ status: err.status as number, context: 'services' })
+        )
+      )
       .subscribe((services) => {
-        this.services$.next(services);
+        if (services instanceof Array) {
+          this.services$.next(services);
+        } else {
+          this.toast.showToast(
+            this.handleError(services.status, services.context)
+          );
+        }
       });
   }
 
@@ -62,8 +101,19 @@ export class PatientsService {
     patient = { ...patient, dateOfBirth: patient.dateOfBirth.split('T')[0] };
     this.http
       .post<Patient>(`${this.apiUrl}/patients`, patient)
+      .pipe(
+        catchError((err) => {
+          return of({ status: err.status as number, context: 'create' });
+        })
+      )
       .subscribe((patient) => {
-        this.patients$.next([...this.patients$.value, patient]);
+        if ('id' in patient) {
+          this.patients$.next([...this.patients$.value, patient]);
+        } else {
+          this.toast.showToast(
+            this.handleError(patient.status, patient.context)
+          );
+        }
         this.loader.dismissLoader();
       });
   }
@@ -73,14 +123,25 @@ export class PatientsService {
 
     this.http
       .put<Patient>(`${this.apiUrl}/patients/${patientId}`, patient)
+      .pipe(
+        catchError((err) => {
+          return of({ status: err.status as number, context: 'update' });
+        })
+      )
       .subscribe((newPatient) => {
-        if (newPatient.services.length > this.mostVisits$.value) {
-          this.mostVisits$.next(newPatient.services.length);
+        if ('id' in newPatient) {
+          if (newPatient.services.length > this.mostVisits$.value) {
+            this.mostVisits$.next(newPatient.services.length);
+          }
+          const updatedPatients = this.patients$.value.map((oldPatient) =>
+            newPatient.id === oldPatient.id ? newPatient : oldPatient
+          );
+          this.patients$.next(updatedPatients);
+        } else {
+          this.toast.showToast(
+            this.handleError(newPatient.status, newPatient.context)
+          );
         }
-        const updatedPatients = this.patients$.value.map((oldPatient) =>
-          newPatient.id === oldPatient.id ? newPatient : oldPatient
-        );
-        this.patients$.next(updatedPatients);
         this.loader.dismissLoader();
       });
   }
@@ -91,5 +152,15 @@ export class PatientsService {
 
   getServices(): Observable<GenderService[]> {
     return this.services$;
+  }
+
+  private handleError(status: number, source: string): string {
+    return status === 0
+      ? `The server is down try again later.`
+      : status === 404
+      ? `The ${source} data could not be fetched.`
+      : status === 422
+      ? `Invalid data entry on ${source}`
+      : `Unknown error occured.`;
   }
 }
